@@ -1,11 +1,13 @@
 const express = require("express");
 // const cors  = require("cors");
 const mongoose = require('mongoose');
+const cookies = require('cookie-parser')
 require('dotenv').config();
 
 const app = express()
 // app.use(cors());
 app.use(express.json());
+app.use(cookies())
 app.use(require('./router/routes.js'))
 
 
@@ -18,8 +20,6 @@ mongoose.connect(DB).then(()=>{
     console.log(err)
     console.log("Database Connection Failed!")
 })
-
-
 
 
 app.listen(PORT,()=>{

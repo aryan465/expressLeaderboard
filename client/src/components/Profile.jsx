@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css'
+import {useNavigate} from 'react-router-dom'
 
 const Profile = () => {
-
+    const[userData,setUserData] = useState();
+    const navigate = useNavigate();
     const callProfile = async () => {
         try {
             const res = await fetch('./profile',{
@@ -14,16 +16,35 @@ const Profile = () => {
                 credentials:"include"
             })
 
-            // const data = await
+            const data = await res.json();
+            setUserData(data)
 
+            if(res.status!==200){
+                const err = new Error(res.error)
+                throw err;
+
+            }
+            
         } catch (error) {
             console.log(error)
+            navigate("/")
+            // window.alert("Login to view profile")
         }
     }
 
     useEffect(() => {
-        callProfile()
+        callProfile();
     }, [])
+
+
+    if(userData===undefined){
+        return(
+            <>Profile</>
+        )
+    }
+    else{
+
+    
     return (
         <div className="container">
             <div className="container emp-profle"
@@ -43,7 +64,7 @@ const Profile = () => {
                         style={{
                             margin: "15px 0 5px 20px"
                         }}
-                    ><h3>Aryan Anand</h3></div>
+                    ><h3>{userData.name}</h3></div>
                     <hr className="my-4"></hr>
 
 
@@ -57,9 +78,14 @@ const Profile = () => {
                     }}>
                         <div className="container" style={{
                             // border: "1px solid black",
-                            color: "#395B69"
+                            color: "#395B69",
+                            width:"30%",
+                            paddingLeft:"0"
                         }}>
-                            <ul style={{ listStyle: "none" }}>
+                            <ul style={{ 
+                                listStyle: "none",
+                                paddingLeft:"5px"
+                             }}>
                                 <li>User_id</li>
                                 <li>Email</li>
                                 <li>Points</li>
@@ -68,13 +94,16 @@ const Profile = () => {
                         <div className="container" style={{
                             // border: "1px solid black",
                             color: "#113CFC",
+                            paddingLeft:"0"
+
                         }}>
                             <ul style={{
                                 listStyle: "none",
+                                paddingLeft:"10px"
                             }}>
-                                <li>15sxbhbhd1548</li>
-                                <li>name@example</li>
-                                <li>1000</li>
+                                <li>{userData._id}</li>
+                                <li>{userData.email}</li>
+                                <li>{userData.points}</li>
                             </ul>
                         </div>
                     </div>
@@ -84,5 +113,5 @@ const Profile = () => {
         </div>
     )
 }
-
+}
 export default Profile

@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken')
 const Authenticate = require('../middleware/authenticate')
 
+
 const { User, Leaderboard } = require("../model/dbSchema.js")
 
 router.get('/', (req, res) => {
@@ -29,7 +30,7 @@ router.post('/register', async (req, res) => {
             return res.status(422).json({ error: "Passwords do not match" })
         }
         else {
-            const user = new User({ name, email, password })
+            const user = new User({ name, email, points, password })
             await user.save()
             const leaderboard = new Leaderboard({ name, email, points })
             await leaderboard.save()
@@ -65,7 +66,6 @@ router.post('/signin', async (req, res) => {
             }
             else{
                 const token = await ifUserExists.generateAuthToken();
-                console.log(token)
                 res.cookie("authtoken",token,{
                     expires: new Date(Date.now() + 2592000000),
                     httpOnly:true 

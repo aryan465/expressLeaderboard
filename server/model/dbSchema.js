@@ -15,6 +15,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    points: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     tokens: [
         {
             token: {

@@ -12,7 +12,7 @@ const Signin = () => {
     const handleSignin = async(e)=>{
         e.preventDefault();
 
-        const logRes = await fetch("/signin",{
+        const loginRes = await fetch("/signin",{
             method:"POST",
             headers:{
                 "Content-Type" : "application/json"
@@ -23,11 +23,15 @@ const Signin = () => {
         })
 
 
-        if(logRes.status !== 200 || !logRes){
-            window.alert("Inavlid Credentials")
+        if(loginRes.status !== 200 || !loginRes){
+            if(loginRes.status>=500){
+                alert("Server Timeout")
+            }
+            else
+            {window.alert("Inavlid Credentials")
             console.log("Inavlid Credentials")
             setEmail('')
-            setPassword('')
+            setPassword('')}
         }
         else{
             window.alert("Login Successfull")
